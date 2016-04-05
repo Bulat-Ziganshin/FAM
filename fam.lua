@@ -8,7 +8,7 @@ function get_dir (dir_path)
   for f in lfs.dir(dir_path) do
     if f ~= '.' and f ~= '..' then
       if lfs.attributes(dir_path..'/'..f,'mode') == 'file' then
-        table.insert(files,f) 
+        table.insert(files,f)
       else
         table.insert(dirs,f)
       end
@@ -33,9 +33,11 @@ matrix = iup.matrix
     markarea = "not_continuous",
     markmode = "cell",
     markmultiple = "yes",
+    xautohide = "yes",
+    yautohide = "yes",
 }
 
-function matrix:value_cb(l, c) 
+function matrix:value_cb(l, c)
   if c == 0 then
     return nil--"title"
   end
@@ -46,11 +48,20 @@ function matrix:value_cb(l, c)
   return self.data[l][c]
 end
 
+function matrix:markedit_cb(l, c, marked)
+  self._marked[l] = marked
+  for c=1,self.numcol do
+    self["mark"..l..":"..c] = marked
+  end
+end
+
 function matrix:fill (dir_path)
   local files,dirs = get_dir(dir_path)
   self.data = {}
+  self._marked = {}
   for i = 1,#files do
     self.data[i] = {files[i],1,2}
+    self._marked[i] = 0
   end
   for i = #dirs,1,-1 do
   end
@@ -61,4 +72,3 @@ matrix:fill(".")
 
 dlg=iup.dialog{matrix; title="FAM" }
 dlg:popup()
-
