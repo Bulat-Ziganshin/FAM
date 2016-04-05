@@ -26,6 +26,13 @@ matrix = iup.matrix
     height0=10,
     widthdef=30,
     width1=100,
+    alignment1 = "aleft",
+    alignment2 = "aright",
+    alignment3 = "aright",
+    resizematrix = "yes",
+    markarea = "not_continuous",
+    markmode = "cell",
+    markmultiple = "yes",
 }
 
 function matrix:value_cb(l, c) 
