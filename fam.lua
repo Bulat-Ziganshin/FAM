@@ -33,6 +33,7 @@ matrix = iup.matrix
     markarea = "not_continuous",
     markmode = "cell",
     markmultiple = "yes",
+    markattitle = "no",
     xautohide = "yes",
     yautohide = "yes",
 }
@@ -50,10 +51,21 @@ end
 
 function matrix:markedit_cb(l, c, marked)
   self._marked[l] = marked
-  for c=1,self.numcol do
-    self["mark"..l..":"..c] = marked
+  self.redraw = "l"..l
+end
+
+function matrix:mark_cb(l, c)
+  return self._marked[l]
+end
+
+function matrix:click_cb(l, c, status)
+  if l==0 and iup.isbutton1(status) then
+    self["sortsign"..c] = "up"
+    self.redraw = "l"..l..":c"..c
   end
 end
+
+
 
 function matrix:fill (dir_path)
   local files,dirs = get_dir(dir_path)
